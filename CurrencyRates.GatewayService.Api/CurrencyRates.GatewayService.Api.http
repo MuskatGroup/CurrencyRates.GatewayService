@@ -1,0 +1,21 @@
+@CurrencyRates.GatewayService.Api_HostAddress = http://localhost:5000
+
+### Health
+GET {{CurrencyRates.GatewayService.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+### Dev token via gateway (proxied to Finance, anonymous)
+# @name getToken
+POST {{CurrencyRates.GatewayService.Api_HostAddress}}/api/finance/dev/token
+Accept: application/json
+
+###
+
+### User rates via gateway (JWT required)
+GET {{CurrencyRates.GatewayService.Api_HostAddress}}/api/finance/rates
+Authorization: Bearer {{getToken.response.body.$.token}}
+Accept: application/json
+
+###

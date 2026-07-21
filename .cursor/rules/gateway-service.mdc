@@ -1,0 +1,37 @@
+---
+description: GatewayService — YARP API Gateway
+alwaysApply: true
+---
+
+# GatewayService
+
+## Ответственность
+
+- Единая точка входа для User и Finance микросервисов
+- YARP reverse proxy
+
+## Маршруты (пример)
+
+| Путь | Upstream |
+|------|----------|
+| `/api/users/{**catch-all}` | UserService (localhost:5001) |
+| `/api/finance/{**catch-all}` | FinanceService (localhost:5002) |
+
+## JWT
+
+- Валидировать JWT на Gateway для защищённых маршрутов
+- Login/Register — без авторизации
+- Пробрасывать Authorization header downstream
+
+## Структура
+
+```
+src/
+  CurrencyRates.Gateway/   # Program.cs, appsettings с YARP clusters/routes
+```
+
+## Правила
+
+- Нет бизнес-логики и доступа к БД
+- CORS настроить при необходимости
+- Swagger опционально (можно агрегировать или оставить на сервисах)

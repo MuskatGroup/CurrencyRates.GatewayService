@@ -1,0 +1,4 @@
+<Solution>
+  <Folder Name="/Tests/" />
+  <Project Path="CurrencyRates.GatewayService.Api/CurrencyRates.GatewayService.Api.csproj" />
+</Solution>

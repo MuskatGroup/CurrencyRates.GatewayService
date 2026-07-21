@@ -1,0 +1,53 @@
+---
+description: CurrencyRates — общие стандарты .NET 8 для всех C#-сервисов
+alwaysApply: true
+---
+
+# CurrencyRates — общие стандарты
+
+## Стек
+
+- .NET 8, C# 12, nullable enabled
+- PostgreSQL + EF Core (Npgsql)
+- Сборка: MSVS 2022
+
+## Архитектура (User, Finance)
+
+```
+Domain → Application → Infrastructure → Api
+```
+
+- **Domain**: сущности, value objects, доменные исключения
+- **Application**: MediatR Commands/Queries, Handlers, интерфейсы репозиториев
+- **Infrastructure**: EF DbContext, реализации репозиториев
+- **Api**: endpoints, DI, middleware
+
+## CQRS
+
+- Один handler на одну Command/Query
+- Валидация: FluentValidation
+- MediatR pipeline для валидации
+
+## Безопасность
+
+- Пароли только в виде хеша (BCrypt / PasswordHasher)
+- JWT: Issuer, Audience, SecretKey из конфигурации
+- Не логировать пароли и токены
+
+## Тесты (User, Finance)
+
+- xUnit + NSubstitute или Moq
+- Тестировать handlers, validators, domain logic
+- Именование: `MethodName_Scenario_ExpectedResult`
+
+## Git
+
+- Не коммитить: bin/, obj/, .vs/, appsettings.Development.json с секретами
+- Минимальный scope изменений
+
+## Схема БД (общая)
+
+- `currency` (id, name, rate)
+- `user` (id, name, password)
+- `favorites` (user_id, currency_id)
+- Миграции — только в MigrationService
