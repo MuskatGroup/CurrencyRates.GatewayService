@@ -39,21 +39,15 @@ builder.Services
     .AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-if (builder.Environment.IsDevelopment())
+builder.Services.AddCors(options =>
 {
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-    });
-}
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors();
-}
+app.UseCors();
 
 var httpsPort = Environment.GetEnvironmentVariable("ASPNETCORE_HTTPS_PORTS");
 if (!string.IsNullOrWhiteSpace(httpsPort))
